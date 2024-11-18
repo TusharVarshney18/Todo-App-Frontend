@@ -16,7 +16,10 @@ const Login = ({ onClose }) => {
     const { email, password } = data;
 
     try {
-      const { data } = await axios.post("https://todo-app-backend-sand.vercel.app/login", { email, password });
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/login`, { 
+        email, 
+        password 
+    }, { withCredentials: true});
       if (data.error) {
         toast.error(data.error);
       } else {

@@ -15,11 +15,12 @@ const Register = ({ onClose }) => {
   const handleFormSubmit = async (e) => {
     const { name, email, password } = data;
     try {
-      const { data } = await axios.post("/register", {
-        name,
-        email,
-        password,
-      });
+      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/register`, { 
+        name, 
+        email, 
+        password 
+    });
+    
       if (data.error) {
         toast.error(data.error);
       } else {
