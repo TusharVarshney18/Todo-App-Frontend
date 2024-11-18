@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Login = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [data, setData] = useState({ email: "himanshu1998delhi@gmail.com", password: "123456" });
+  const [data, setData] = useState({ email: "", password: "" });
   const { setUser } = useContext(Usercontext);
   const navigate = useNavigate();
 
