@@ -11,7 +11,7 @@ import axios from "axios";
 import Dashboard from "./components/Dashboard";
 import Todos from "./components/todos";
 
-axios.defaults.baseURL = "https://todo-app-backend-sand.vercel.app/";
+axios.defaults.baseURL = "https://todo-app-backend-sand.vercel.app";
 axios.defaults.withCredentials = true;
 
 function App() {

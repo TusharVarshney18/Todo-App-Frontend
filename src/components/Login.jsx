@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Login = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [data, setData] = useState({ email: "", password: "" });
+  const [data, setData] = useState({ email: "himanshu1998delhi@gmail.com", password: "123456" });
   const { setUser } = useContext(Usercontext);
   const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ const Login = ({ onClose }) => {
     const { email, password } = data;
 
     try {
-      const { data } = await axios.post("/login", { email, password });
+      const { data } = await axios.post("https://todo-app-backend-sand.vercel.app/login", { email, password });
       if (data.error) {
         toast.error(data.error);
       } else {
