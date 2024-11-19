@@ -15,7 +15,7 @@ const Register = ({ onClose }) => {
   const handleFormSubmit = async (e) => {
     const { name, email, password } = data;
     try {
-      const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/register`, { 
+      const { data } = await axios.post("https://todo-app-frontend-sable.vercel.app/register", { 
         name, 
         email, 
         password 
