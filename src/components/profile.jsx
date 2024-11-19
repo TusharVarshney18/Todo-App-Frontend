@@ -8,13 +8,14 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       const token = localStorage.getItem("token", token);
+      console.log("token", token);
       if (!token) {
         console.error("No token found");
         setLoading(false);
         return;
       }
       try {
-        const response = await axios.get("https://todo-app-backend-sand.vercel.app/profile", {
+        const response = await axios.get("/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setProfile(response.data); // Assuming response contains profile data

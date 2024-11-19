@@ -17,7 +17,7 @@ const Todos = () => {
   // Fetch todos from backend on component mount
   useEffect(() => {
     axios
-      .get("https://todo-app-backend-sand.vercel.app/")
+      .get("/api/todos")
       .then((response) => {
         setTodos(response.data); // Set todos from the server response
       })
@@ -29,7 +29,7 @@ const Todos = () => {
   // Add new todo
   const handleAdd = async () => {
     try {
-      const response = await axios.post("https://todo-app-backend-sand.vercel.app/api/todos", {
+      const response = await axios.post("/api/todos", {
         todo: todo,
         isCompleted: false,
       });
@@ -53,7 +53,7 @@ const Todos = () => {
   // Delete a todo
   const handleDelete = async (e, id) => {
     try {
-      await axios.delete(`https://todo-app-backend-sand.vercel.app/api/todos/${id}`);
+      await axios.delete(`/api/todos/${id}`);
       const newTodos = todos.filter((item) => item._id !== id);
       setTodos(newTodos); // Update state after deletion
       deleteNotify(); // Notify on successful delete
@@ -73,7 +73,7 @@ const Todos = () => {
 
     try {
       const response = await axios.put(
-        `https://todo-app-backend-sand.vercel.app/api/todos/${id}`,
+        `/api/todos/${id}`,
         updatedTodo
       );
       let newTodos = [...todos];
