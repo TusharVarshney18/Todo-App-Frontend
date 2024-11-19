@@ -4,7 +4,7 @@ import axios from "axios";
 const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const url = "https://todo-app-backend-sand.vercel.app/";
+  const url = "https://todo-app-backend-sand.vercel.app";
 
   useEffect(() => {
     const fetchProfile = async () => {
