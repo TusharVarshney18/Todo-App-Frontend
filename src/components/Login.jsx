@@ -16,7 +16,7 @@ const Login = ({ onClose }) => {
     const { email, password } = data;
 
     try {
-      const { data } = await axios.post("https://todo-app-frontend-sable.vercel.app/login", { email, password });
+      const { data } = await axios.post("https://todo-app-backend-sand.vercel.app//login", { email, password });
       if (data.error) {
         toast.error(data.error);
       } else {
