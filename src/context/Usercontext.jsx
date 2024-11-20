@@ -38,7 +38,7 @@ export function UsercontextProvider({ children }) {
     } finally {
       setUser(null); // Clear user state
       localStorage.removeItem("token"); // Remove token
-      window.location.href = "/login"; // Redirect to login
+      window.location.href = "/"; // Redirect to login
     }
   };
 
