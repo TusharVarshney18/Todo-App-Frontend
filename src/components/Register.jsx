@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Register = ({ onClose }) => {
   const navigate = useNavigate();
@@ -13,28 +13,26 @@ const Register = ({ onClose }) => {
   });
 
   const handleFormSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
     const { name, email, password } = data;
     try {
-      const { data } = await axios.post("/register", { 
-        name, 
-        email, 
-        password 
-    });
-    
-      if (data.error) {
+      const { data } = await axios.post("/register", { name, email, password });
+      
+      if (data && data.error) {
         toast.error(data.error);
       } else {
-        setData({});
-        toast.success("Login Successfull ...Welcome User");
-        navigate("/Dashboard");
+        setData({ name: "", email: "", password: "" });
+        toast.success("Registration Successful! Welcome User.");
+        navigate("/");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Registration failed: ", error);
+      toast.error("An error occurred. Please try again.");
     }
   };
 
   const handlecancel = () => {
-    setData({ email: "", password: "" });
+    setData({ name: "", email: "", password: "" });
     if (onClose) onClose();
     navigate("/");
   };
@@ -50,7 +48,7 @@ const Register = ({ onClose }) => {
             </label>
             <input
               type="text"
-              id="signup-username" // Unique ID for username
+              id="signup-username"
               value={data.name}
               onChange={(e) => setData({ ...data, name: e.target.value })}
               className="w-full p-2 border rounded"
@@ -63,7 +61,7 @@ const Register = ({ onClose }) => {
             </label>
             <input
               type="email"
-              id="signup-email" // Unique ID for email
+              id="signup-email"
               value={data.email}
               onChange={(e) => setData({ ...data, email: e.target.value })}
               className="w-full p-2 border rounded"
@@ -77,7 +75,7 @@ const Register = ({ onClose }) => {
             </label>
             <input
               type="password"
-              id="signup-password" // Unique ID for password
+              id="signup-password"
               value={data.password}
               onChange={(e) => setData({ ...data, password: e.target.value })}
               className="w-full p-2 border rounded"

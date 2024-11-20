@@ -11,7 +11,12 @@ import axios from "axios";
 import Dashboard from "./components/Dashboard";
 import Todos from "./components/todos";
 
-axios.defaults.baseURL = "https://todo-app-backend-sand.vercel.app";
+axios.defaults.baseURL = axios.defaults.baseURL =
+process.env.NODE_ENV === "production"
+  ? "https://todo-app-backend-sand.vercel.app" // Update to actual production URL
+  : "http://localhost:3000"; // Local backend URL for development
+axios.defaults.withCredentials = true; // Ensure cookies are sent
+
 axios.defaults.withCredentials = true;
 
 function App() {

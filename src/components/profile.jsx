@@ -7,7 +7,7 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const token = localStorage.getItem("token", token);
+      const token = localStorage.getItem("token");
       console.log("token", token);
       if (!token) {
         console.error("No token found");

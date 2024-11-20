@@ -11,8 +11,8 @@ const Home = () => {
       {user ? (
         <>
           <h2 className="text-2xl font-extrabold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-fadeIn">
-  Welcome back, {user.name}!
-</h2>
+          Welcome back, {user?.name || "Guest"}!
+          </h2>
 <p className="mt-1 text-base font-medium text-gray-700 animate-fadeIn delay-200">
   Here are your todos:
 </p>

@@ -8,30 +8,27 @@ import "react-toastify/dist/ReactToastify.css";
 const Login = ({ onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({ email: "", password: "" });
-  const { setUser } = useContext(Usercontext);
+  const { fetchProfile } = useContext(Usercontext);
   const navigate = useNavigate();
 
   const loginuser = async (e) => {
     e.preventDefault();
+
     const { email, password } = data;
 
     try {
       const { data } = await axios.post("/login", { email, password });
+
       if (data.error) {
         toast.error(data.error);
       } else {
- 
-        setUser(data.user); 
-        setData({ email: "", password: "" });
-      
-        if (onClose) onClose(); 
+        localStorage.setItem("token", data.token); // Store token
+        await fetchProfile(); // Refresh user context
         
-        toast.success("Login successful!");
+        setData({ email: "", password: "" });
 
-    
-        setTimeout(() => {
-          navigate("/");
-        }, 2000)
+        if (onClose) onClose();
+        navigate("/"); // Redirect after login
       }
     } catch (error) {
       const errorMessage =
@@ -46,11 +43,11 @@ const Login = ({ onClose }) => {
     navigate("/");
   };
 
-
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   return (
     <div className="fixed inset-0 bg-gray-700 bg-opacity-75 flex justify-center items-center">
-      <div className="bg-white rounded p-5 shadow-lg">
+      <div className="bg-white rounded p-5 shadow-lg max-w-sm w-full">
         <h2 className="text-black font-bold mb-4">Login</h2>
         <form onSubmit={loginuser}>
           <div className="mb-4">
@@ -62,7 +59,7 @@ const Login = ({ onClose }) => {
               id="email"
               value={data.email}
               onChange={(e) => setData({ ...data, email: e.target.value })}
-              className="w-full p-2 border-rounded"
+              className="w-full p-2 border border-gray-300 rounded"
               required
               autoComplete="username"
             />
@@ -73,16 +70,22 @@ const Login = ({ onClose }) => {
             </label>
             <input
               type={showPassword ? "text" : "password"}
-              id="Password"
+              id="password"
               value={data.password}
               onChange={(e) => setData({ ...data, password: e.target.value })}
-              className="w-full p-2 border-rounded"
+              className="w-full p-2 border border-gray-300 rounded"
               required
               autoComplete="current-password"
             />
-            
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-2 top-8 text-gray-500"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end space-x-2">
             <button
               type="submit"
               className="bg-violet-600 text-white px-4 py-2 rounded hover:bg-violet-700"
@@ -91,7 +94,7 @@ const Login = ({ onClose }) => {
             </button>
             <button
               type="button"
-              className="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
               onClick={handlecancel}
             >
               Cancel
