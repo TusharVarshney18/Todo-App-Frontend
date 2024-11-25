@@ -32,7 +32,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         {/* App Name/Logo */}
         <div className="text-white font-bold text-2xl">
-          Todo App By Varshney
+          Todo App
         </div>
 
         {/* Desktop Links */}
