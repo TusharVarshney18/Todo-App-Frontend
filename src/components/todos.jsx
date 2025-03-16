@@ -13,7 +13,7 @@ const Todos = () => {
   const [isAdding, setIsAdding] = useState(false);
 
   const toastConfig = {
-    position: "bottom-right",
+    position: "top-center",
     autoClose: 2000,
     hideProgressBar: true,
     closeOnClick: true,
@@ -21,7 +21,11 @@ const Todos = () => {
     draggable: true,
     progress: undefined,
     theme: "colored",
-    style: { fontSize: "14px" },
+    style: {
+      fontSize: "14px",
+      borderRadius: "10px",
+      padding: "12px 24px",
+    },
   };
 
   const addNotify = () => toast.success("✓ Task added", toastConfig);
@@ -110,10 +114,10 @@ const Todos = () => {
   return (
     <div className="w-full animate-fadeIn">
       <ToastContainer
-        position="bottom-right"
+        position="top-center"
         autoClose={2000}
         hideProgressBar
-        newestOnTop
+        newestOnTop={false}
         closeOnClick
         rtl={false}
         pauseOnFocusLoss={false}
@@ -121,58 +125,51 @@ const Todos = () => {
         pauseOnHover={false}
         theme="colored"
         style={{ fontSize: "14px" }}
+        limit={3}
       />
 
       <div className="space-y-6">
         {/* Add Todo Section */}
-        <div className="relative group">
+        <div className="relative flex items-center gap-2 bg-white p-2 rounded-xl shadow-sm border border-violet-100 focus-within:border-violet-300 focus-within:ring-2 focus-within:ring-violet-200 hover:border-violet-200 transition-all duration-300">
           <input
             type="text"
             onChange={(e) => setTodo(e.target.value)}
             onKeyPress={handleKeyPress}
             value={todo}
             placeholder="What needs to be done?"
-            className="w-full px-4 py-3 pr-28 rounded-xl border border-violet-100 focus:border-violet-300 focus:ring-2 focus:ring-violet-200 outline-none transition-all duration-300 placeholder:text-gray-400 group-hover:border-violet-200"
+            className="flex-1 px-3 py-2 bg-transparent border-none outline-none text-gray-700 placeholder:text-gray-400"
           />
           <button
             onClick={handleAdd}
             disabled={todo.trim().length <= 2 || isAdding}
-            className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-violet-600 text-white rounded-lg font-medium 
+            className="shrink-0 px-6 py-2 bg-violet-600 text-white rounded-lg font-medium 
             transition-all duration-300 hover:bg-violet-700 
             disabled:opacity-50 disabled:hover:bg-violet-600 disabled:cursor-not-allowed
-            transform hover:scale-102 active:scale-98 hover:shadow-lg
-            flex items-center gap-2 min-w-[90px] justify-center
-            before:absolute before:inset-0 before:rounded-lg before:bg-white before:opacity-0 hover:before:opacity-10
-            overflow-hidden"
+            transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-md
+            flex items-center gap-2 min-w-[120px] justify-center
+            relative overflow-hidden group"
           >
+            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
             {isAdding ? (
               <>
                 <svg
-                  className="animate-spin -ml-1 h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
+                  className="animate-spin h-4 w-4"
                   viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
                 >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
                   <path
                     className="opacity-75"
-                    fill="currentColor"
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
+                  />
                 </svg>
-                Adding
+                <span>Adding...</span>
               </>
             ) : (
               <>
                 <svg
-                  className="w-4 h-4 transition-transform group-hover:rotate-180"
+                  className="w-4 h-4 transition-transform duration-300 group-hover:rotate-90"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -181,10 +178,10 @@ const Todos = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                    d="M12 4v16m8-8H4"
                   />
                 </svg>
-                Add Task
+                <span>Add Task</span>
               </>
             )}
           </button>
