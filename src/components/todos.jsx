@@ -130,23 +130,23 @@ const Todos = () => {
 
       <div className="space-y-6">
         {/* Add Todo Section */}
-        <div className="relative flex items-center gap-2 bg-white p-2 rounded-xl shadow-sm border border-violet-100 focus-within:border-violet-300 focus-within:ring-2 focus-within:ring-violet-200 hover:border-violet-200 transition-all duration-300">
+        <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-white p-2 rounded-xl shadow-sm border border-violet-100 focus-within:border-violet-300 focus-within:ring-2 focus-within:ring-violet-200 hover:border-violet-200 transition-all duration-300">
           <input
             type="text"
             onChange={(e) => setTodo(e.target.value)}
             onKeyPress={handleKeyPress}
             value={todo}
             placeholder="What needs to be done?"
-            className="flex-1 px-3 py-2 bg-transparent border-none outline-none text-gray-700 placeholder:text-gray-400"
+            className="w-full flex-1 px-3 py-2 bg-transparent border-none outline-none text-gray-700 placeholder:text-gray-400"
           />
           <button
             onClick={handleAdd}
             disabled={todo.trim().length <= 2 || isAdding}
-            className="shrink-0 px-6 py-2 bg-violet-600 text-white rounded-lg font-medium 
+            className="w-full sm:w-auto shrink-0 px-4 py-2 bg-violet-600 text-white rounded-lg font-medium 
             transition-all duration-300 hover:bg-violet-700 
             disabled:opacity-50 disabled:hover:bg-violet-600 disabled:cursor-not-allowed
             transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-md
-            flex items-center gap-2 min-w-[120px] justify-center
+            flex items-center gap-2 sm:min-w-[120px] justify-center
             relative overflow-hidden group"
           >
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
