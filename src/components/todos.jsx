@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Usercontext } from "../context/Usercontext";
 
 const Todos = () => {
+  const { user } = useContext(Usercontext);
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
   const [showFinished, setShowFinished] = useState(true);
@@ -32,29 +34,51 @@ const Todos = () => {
   const deleteNotify = () => toast.success("✓ Task deleted", toastConfig);
   const errorNotify = (message) => toast.error(message, toastConfig);
 
+  // Get auth token
+  const getAuthHeader = () => {
+    const token = localStorage.getItem("token");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   useEffect(() => {
-    axios
-      .get("/api/todos")
-      .then((response) => {
+    const fetchTodos = async () => {
+      if (!user) {
+        setTodos([]);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const response = await axios.get("/api/todos", {
+          headers: getAuthHeader(),
+        });
         setTodos(response.data);
         setIsLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.log("Error fetching todos:", err);
         setIsLoading(false);
         errorNotify("Failed to load tasks");
-      });
-  }, []);
+      }
+    };
+
+    fetchTodos();
+  }, [user]);
 
   const handleAdd = async () => {
     if (todo.trim().length <= 2) return;
 
     setIsAdding(true);
     try {
-      const response = await axios.post("/api/todos", {
-        todo: todo,
-        isCompleted: false,
-      });
+      const response = await axios.post(
+        "/api/todos",
+        {
+          todo: todo,
+          isCompleted: false,
+        },
+        {
+          headers: getAuthHeader(),
+        }
+      );
       const newTodo = response.data;
       setTodos((prevTodos) => [...prevTodos, newTodo]);
       setTodo("");
@@ -76,7 +100,9 @@ const Todos = () => {
 
   const handleDelete = async (e, id) => {
     try {
-      await axios.delete(`/api/todos/${id}`);
+      await axios.delete(`/api/todos/${id}`, {
+        headers: getAuthHeader(),
+      });
       const newTodos = todos.filter((item) => item._id !== id);
       setTodos(newTodos);
       deleteNotify();
@@ -95,7 +121,9 @@ const Todos = () => {
     };
 
     try {
-      const response = await axios.put(`/api/todos/${id}`, updatedTodo);
+      const response = await axios.put(`/api/todos/${id}`, updatedTodo, {
+        headers: getAuthHeader(),
+      });
       let newTodos = [...todos];
       newTodos[index] = response.data;
       setTodos(newTodos);

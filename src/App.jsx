@@ -12,9 +12,9 @@ import Dashboard from "./components/Dashboard";
 import Todos from "./components/todos";
 
 axios.defaults.baseURL = axios.defaults.baseURL =
-process.env.NODE_ENV === "production"
-  ? "https://todo-app-backend-sand.vercel.app" // Update to actual production URL
-  : "http://localhost:3000"; // Local backend URL for development
+  process.env.NODE_ENV === "production"
+    ? "https://todo-app-backend-sand.vercel.app" // Update to actual production URL
+    : "http://localhost:3000"; // Local backend URL for development
 axios.defaults.withCredentials = true; // Ensure cookies are sent
 
 axios.defaults.withCredentials = true;
@@ -41,7 +41,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/todos" element={<Todos />} /> {/* New Todos route */}
       </Routes>
-      
       {/* Show Login Modal */}
       {showLogin && (
         <Login
@@ -49,7 +48,6 @@ function App() {
           onLoginSuccess={handleLoginSuccess} // Handle successful login
         />
       )}
-
     </UsercontextProvider>
   );
 }
