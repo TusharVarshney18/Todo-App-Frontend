@@ -10,9 +10,23 @@ const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [showFinished, setShowFinished] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdding, setIsAdding] = useState(false);
 
-  const addNotify = () => toast.success("Todo has been added!");
-  const deleteNotify = () => toast.success("Todo has been deleted!");
+  const toastConfig = {
+    position: "bottom-right",
+    autoClose: 2000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: false,
+    draggable: true,
+    progress: undefined,
+    theme: "colored",
+    style: { fontSize: "14px" },
+  };
+
+  const addNotify = () => toast.success("✓ Task added", toastConfig);
+  const deleteNotify = () => toast.success("✓ Task deleted", toastConfig);
+  const errorNotify = (message) => toast.error(message, toastConfig);
 
   useEffect(() => {
     axios
@@ -24,12 +38,14 @@ const Todos = () => {
       .catch((err) => {
         console.log("Error fetching todos:", err);
         setIsLoading(false);
+        errorNotify("Failed to load tasks");
       });
   }, []);
 
   const handleAdd = async () => {
     if (todo.trim().length <= 2) return;
 
+    setIsAdding(true);
     try {
       const response = await axios.post("/api/todos", {
         todo: todo,
@@ -41,7 +57,9 @@ const Todos = () => {
       addNotify();
     } catch (err) {
       console.log("Error adding todo:", err);
-      toast.error("Failed to add todo");
+      errorNotify("Failed to add task");
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -60,7 +78,7 @@ const Todos = () => {
       deleteNotify();
     } catch (err) {
       console.log("Error deleting todo:", err);
-      toast.error("Failed to delete todo");
+      errorNotify("Failed to delete task");
     }
   };
 
@@ -79,7 +97,7 @@ const Todos = () => {
       setTodos(newTodos);
     } catch (err) {
       console.log("Error updating todo:", err);
-      toast.error("Failed to update todo");
+      errorNotify("Failed to update task");
     }
   };
 
@@ -91,25 +109,84 @@ const Todos = () => {
 
   return (
     <div className="w-full animate-fadeIn">
-      <ToastContainer position="bottom-right" theme="colored" />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+        style={{ fontSize: "14px" }}
+      />
 
       <div className="space-y-6">
         {/* Add Todo Section */}
-        <div className="relative">
+        <div className="relative group">
           <input
             type="text"
             onChange={(e) => setTodo(e.target.value)}
             onKeyPress={handleKeyPress}
             value={todo}
             placeholder="What needs to be done?"
-            className="w-full px-4 py-3 pr-24 rounded-xl border border-violet-100 focus:border-violet-300 focus:ring-2 focus:ring-violet-200 outline-none transition-all duration-300 placeholder:text-gray-400"
+            className="w-full px-4 py-3 pr-28 rounded-xl border border-violet-100 focus:border-violet-300 focus:ring-2 focus:ring-violet-200 outline-none transition-all duration-300 placeholder:text-gray-400 group-hover:border-violet-200"
           />
           <button
             onClick={handleAdd}
-            disabled={todo.trim().length <= 2}
-            className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 bg-violet-600 text-white rounded-lg font-medium transition-all duration-300 hover:bg-violet-700 disabled:opacity-50 disabled:hover:bg-violet-600 transform hover:scale-105 active:scale-95"
+            disabled={todo.trim().length <= 2 || isAdding}
+            className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-violet-600 text-white rounded-lg font-medium 
+            transition-all duration-300 hover:bg-violet-700 
+            disabled:opacity-50 disabled:hover:bg-violet-600 disabled:cursor-not-allowed
+            transform hover:scale-102 active:scale-98 hover:shadow-lg
+            flex items-center gap-2 min-w-[90px] justify-center
+            before:absolute before:inset-0 before:rounded-lg before:bg-white before:opacity-0 hover:before:opacity-10
+            overflow-hidden"
           >
-            Add Task
+            {isAdding ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Adding
+              </>
+            ) : (
+              <>
+                <svg
+                  className="w-4 h-4 transition-transform group-hover:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                Add Task
+              </>
+            )}
           </button>
         </div>
 
