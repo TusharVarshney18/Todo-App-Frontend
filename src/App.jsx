@@ -38,7 +38,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login onClose={() => {}} />} />
         <Route path="/todos" element={<Todos />} /> {/* New Todos route */}
       </Routes>
       {/* Show Login Modal */}
