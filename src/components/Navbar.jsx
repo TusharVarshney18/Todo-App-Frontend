@@ -28,8 +28,13 @@ const Navbar = () => {
     setShowSignUp(false);
   };
 
-  const toggleMobileMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
-
+  const toggleMobileMenu = () => {
+    if (typeof setMobileMenuOpen === "function") {
+      setMobileMenuOpen(!isMobileMenuOpen);
+    } else {
+      console.error("setMobileMenuOpen is not defined");
+    }
+  };
   return (
     <nav className="bg-gradient-to-r from-violet-600 to-violet-700 shadow-lg">
       <div className="container mx-auto px-4">
