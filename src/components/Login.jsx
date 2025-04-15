@@ -248,7 +248,8 @@ const Login = ({ onClose }) => {
 };
 
 Login.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
+  onLoginSuccess: PropTypes.func,
 };
 
 export default Login;
